@@ -1,4 +1,169 @@
-// هنا يمكنك منع المزيد من الإجراءات مثل عرض قائمة السياق
+<!DOCTYPE html>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>zakisherifdev.com</title>
+   
+  <link rel="shortcut icon" href="zakisherifdev.png" type="image/png">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>zakisherifdev.com</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      overflow: hidden;
+      background: #000000;
+      font-family: 'Arial', sans-serif;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+    }
+
+    #stars {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 1;
+    }
+
+    .text {
+      position: relative;
+      z-index: 2;
+      text-align: center;
+      font-weight: 900;
+      color: #ffffff;
+      text-shadow: 
+        0 0 20px #ffffff,
+        0 0 40px #8a2be2,
+        0 0 70px #ff00ff;
+      animation: glow 3s ease-in-out infinite alternate;
+      padding: 15px;
+      white-space: nowrap;
+    }
+
+    /* حجم النص المتجاوب ومناسب للموبايل */
+    .text {
+      font-size: clamp(26px, 7vw, 52px);
+      letter-spacing: clamp(2px, 0.8vw, 6px);
+    text-align: center;
+}
+
+    }
+
+    .text span {
+      color: #ffd700;
+    }
+
+    @keyframes glow {
+      from { text-shadow: 0 0 20px #ffffff, 0 0 40px #8a2be2, 0 0 65px #ff00ff; }
+      to   { text-shadow: 0 0 30px #ffffff, 0 0 55px #8a2be2, 0 0 90px #ff00ff; }
+    }
+  </style>
+</head>
+<body>
+
+  <canvas id="stars"></canvas>
+  <div class="text">
+    zakisherifdev.<span>com</span>
+  </div>
+  
+
+  <script>
+    const canvas = document.getElementById('stars');
+    const ctx = canvas.getContext('2d', { alpha: true });
+
+    let width, height;
+    const stars = [];
+
+    function resize() {
+      width = window.innerWidth;
+      height = window.innerHeight;
+      canvas.width = width;
+      canvas.height = height;
+    }
+
+    class Star {
+      constructor() {
+        this.reset();
+      }
+      reset() {
+        this.x = Math.random() * width;
+        this.y = Math.random() * height;
+        this.size = Math.random() * 1.8 + 0.6;
+        this.speed = Math.random() * 0.8 + 0.25;
+        this.opacity = Math.random() * 0.7 + 0.5;
+      }
+      update() {
+        this.y += this.speed;
+        if (this.y > height) this.reset();
+      }
+      draw() {
+        ctx.globalAlpha = this.opacity;
+        ctx.fillStyle = '#ffffff';
+        ctx.fillRect(this.x, this.y, this.size, this.size);
+      }
+    }
+
+    function initStars() {
+      stars.length = 0;
+      for (let i = 0; i < 420; i++) {   // عدد منخفض للأداء
+        stars.push(new Star());
+      }
+    }
+
+    function animate() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.25)';  // trail أقوى = أداء أفضل
+      ctx.fillRect(0, 0, width, height);
+
+      for (let star of stars) {
+        star.update();
+        star.draw();
+      }
+
+      requestAnimationFrame(animate);
+    }
+
+    window.addEventListener('resize', () => {
+      resize();
+      initStars();
+    });
+
+    resize();
+    initStars();
+    animate();
+  </script>
+
+</body>
+</html>
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منع نسخ الصور</title>
+    
+    <script>
+document.addEventListener('DOMContentLoaded', function() {
+    const longClickElement = document.getElementById('myLongClickPrevent');
+    let pressTimer;
+
+    if (longClickElement) {
+        longClickElement.addEventListener('mousedown', function(e) {
+            // منع تحديد النص مباشرة عند بداية النقر إذا أردت
+            e.preventDefault();
+
+            pressTimer = setTimeout(function() {
+                // هذا الكود سيتم تشغيله بعد "نقر مطول" (مثلاً 500ms)
+                alert('تم اكتشاف نقرة طويلة! تم منع أي سلوك افتراضي.');
+                // هنا يمكنك منع المزيد من الإجراءات مثل عرض قائمة السياق
                 // إذا أردت منع قائمة السياق:
                 // longClickElement.addEventListener('contextmenu', function(ce) {
                 //     ce.preventDefault();
